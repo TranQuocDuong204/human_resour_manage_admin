@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useRouter } from 'next/navigation'
+import { loginUser } from "@/redux/slices/authSlices"
+import { useDispatch } from "react-redux"
 
 const formSchema = z.object({
     email: z.string().email().min(2, {
@@ -30,6 +32,9 @@ const formSchema = z.object({
 
 export function ProfileForm() {
     const [isLoading, setIsLoading] = useState(false)
+    const dispatch = useDispatch();
+
+
     const { toast } = useToast()
     const router = useRouter()
     const form = useForm<z.infer<typeof formSchema>>({
@@ -41,47 +46,23 @@ export function ProfileForm() {
     })
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true)
-        console.log(values.email, values.password);
 
-        try {
-            const res = await fetch("http://127.0.0.1:8000/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email: values.email,
-                    password: values.password
-                }),
-            })
-            const result = await res.json();
-            if (result.error) {
-                setTimeout(() => {
-                    toast({
-                        variant: "destructive",
-                        title: `Email or password incorrect`,
-                        description: `${result.error}`,
-                    })
-                }, 500)
+        const resultAction = await dispatch(loginUser({ ...values }))
 
-            }
-
+        if (loginUser.fulfilled.match(resultAction)) {
+            // Handle success (e.g., redirect to dashboard)
+            router.push("/dashboard");
+        } else {
+            // Handle error (e.g., show toast notification)
+            const errorMessage = resultAction.payload?.error || "Login failed";
             toast({
-                variant: "default",
-                title: "Uh oh! Login success.",
-                description: "There was a problem with your request.",
-            })
-
-            localStorage.setItem("auth", JSON.stringify(result))
-            setIsLoading(false)
-            router.push("/dashboard")
-        } catch (error) {
-            console.log(error);
-
-        } finally {
-            setIsLoading(false)
+                variant: "destructive",
+                title: `Error`,
+                description: `${errorMessage}`,
+            });
         }
-        console.log(values)
+
+        setIsLoading(false);
     }
     return (
         <Form {...form}>

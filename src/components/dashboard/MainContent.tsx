@@ -7,7 +7,7 @@ const MainContent = ({
     children: React.ReactNode;
   }>) => {
     return (
-        <div className="w-full md:w-[80%] lg:w-[87%] xl:w-[87%] p-4 overflow-y-auto bg-gray-50 rounded-lg">
+        <div className="w-full md:w-[80%] lg:w-[87%] xl:w-[87%] p-1 overflow-y-auto bg-gray-50 rounded-lg">
         <section>
           <div className="flex justify-between">
             <div className="flex flex-col">

@@ -6,7 +6,7 @@
 
 * {
     scroll-behavior: smooth;
-    transition: all 0.3s ease;
+    transition: all 0.1s ease;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
