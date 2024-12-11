@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import EmployeesAction from "./employees-action"
-import EmployeesTable from "./employees-table";
+import EmployeesAction from "./EmployeesAction";
+import EmployeesTable from "./EmployeesTable";
 import {
     Card,
     CardContent,
@@ -64,8 +64,8 @@ const EmployeesDashboard = () => {
         console.log('filter');
     }
     return (
-        <Card className="w-full">
-            <CardHeader className="px-6 py-4">
+        <Card className="w-full dark:border-2 dark:border-[#2D3748]">
+            <CardHeader className="px-6 py-4 ">
                 <CardTitle className=" text-xl">Employee Management</CardTitle>
             </CardHeader>
             <CardContent>
