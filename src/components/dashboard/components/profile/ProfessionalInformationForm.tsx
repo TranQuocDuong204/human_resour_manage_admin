@@ -1,15 +1,32 @@
 "use client";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useEffect, useState } from "react";
+import Loader from "../../Loader";
 const ProfessionalInformationForm = ({
   valueInputEmployee,
   getValueInput,
+  isLoading
 }: any) => {
+  const [valueDepartment, setValueDepartment] = useState([]);
+
+  useEffect(() => {
+    async function fetchDataDepartment() {
+      const res = await fetch("http://localhost:8000/departments/");
+      const data = await res.json();
+
+      setValueDepartment(data);
+    }
+
+    fetchDataDepartment();
+  }, []);
+console.log(valueInputEmployee.department_id);
+
+
   return (
     <div>
       {" "}
-      <div className=" grid grid-cols-1  md:grid-cols-2 gap-6 flex-wrap mt-5">
+      {isLoading ? <Loader/>:  <div className=" grid grid-cols-1  md:grid-cols-2 gap-6 flex-wrap mt-5">
         <div className="grid w-full items-center gap-1.5">
           <Label htmlFor="position">Position</Label>
           <Input
@@ -42,12 +59,17 @@ const ProfessionalInformationForm = ({
           <select
             name="department_id"
             id="#"
-            defaultValue={valueInputEmployee.department_id ?? null}
+            value={valueInputEmployee?.department_id || ""}
+            onChange={getValueInput}
             className=" border-2 border-gray-200 p-1.5 rounded-md"
           >
             <option value="">----</option>
-            <option value="department_id1">department_id</option>
-            <option value="department_id2">department_id</option>
+            {valueDepartment &&
+              valueDepartment.map((item: any) => (
+                <option key={item.id} value={item.id}>
+                  {item.name_department}
+                </option>
+              ))}
           </select>
         </div>
 
@@ -89,7 +111,8 @@ const ProfessionalInformationForm = ({
             onChange={getValueInput}
           />
         </div>
-      </div>
+      </div>}
+     
     </div>
   );
 };

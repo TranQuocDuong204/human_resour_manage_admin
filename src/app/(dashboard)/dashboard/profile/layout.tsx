@@ -6,6 +6,7 @@ import { AiOutlineProject } from "react-icons/ai";
 import { IoSettingsSharp } from "react-icons/io5";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { role } from "@/utils/decentralization";
 const menuProfile = [
   {
     id: 1,
@@ -33,6 +34,7 @@ const menuProfile = [
   },
 ];
 const ProfileLayout = ({ children }: { children: ReactNode }) => {
+
   const pathName = usePathname();
   const [isActive, setIsActive] = useState<null | number>(1);
   useEffect(() => {
@@ -42,7 +44,9 @@ const ProfileLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div className="m-2 bg-white ">
-        <ul className="w-full flex gap-1 rounded-md ">
+       
+        {role === "admin" || role === "hr" ? (
+           <ul className="w-full flex gap-1 rounded-md ">
           {menuProfile.map((item) => {
             return (
               <Link key={item.id} href={item.link} className="text-start">
@@ -61,7 +65,9 @@ const ProfileLayout = ({ children }: { children: ReactNode }) => {
               </Link>
             );
           })}
-        </ul>
+        </ul> 
+        ):  <h2>{pathName}</h2>}
+        
       </div>
       <section className="flex flex-row">{children}</section>
     </>

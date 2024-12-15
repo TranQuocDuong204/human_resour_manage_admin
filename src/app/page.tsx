@@ -11,7 +11,7 @@ const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
   const auth = localStorage.getItem("auth") ?? null;
   const parsedAuth = auth ? JSON.parse(auth) : null;
-
+  
   useEffect(() => {
     if (parsedAuth) {
       setIsLogin(true);

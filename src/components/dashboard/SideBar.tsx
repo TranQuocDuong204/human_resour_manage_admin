@@ -18,6 +18,8 @@ const Sidebar = () => {
   const pathName = usePathname();
   const auth = localStorage.getItem("auth") ?? null;
   const parsedAuth = auth ? JSON.parse(auth) : null;
+  const info = parsedAuth.response.role
+
   useEffect(() => {
     const index = dataNav.findIndex((item) => item.link === pathName);
     setIsActive(index + 1);
@@ -49,6 +51,33 @@ const Sidebar = () => {
     },
   ];
 
+
+  const dataNavStaff = [
+    {
+      id: 1,
+      name: "Dasboard",
+      icon: <MdGroups2 />,
+      link: "/dashboard",
+    },
+    {
+      id: 2,
+      name: "Profile",
+      icon: <MdGroups2 />,
+      link: "/dashboard/profile",
+    },
+    {
+      id: 3,
+      name: "Leave",
+      icon: <FaUsersGear />,
+      link: "/dashboard/profile/leave",
+    },
+    {
+      id: 4,
+      name: "Setting",
+      icon: <GoProjectRoadmap />,
+      link: "/dashboard/profile/setting",
+    },
+  ];
   return (
     <>
       <div className="w-0 md:w-[15%] lg:w-[20%] xl:w-[18%] overflow-y-auto bg-[#F8F9FA] dark:bg-[black] shadow-lg rounded-lg px-0 xl:px-4">
@@ -60,8 +89,8 @@ const Sidebar = () => {
               {/* <h2 className=" text-3xl uppercase">Picon</h2> */}
             </div>
 
-            {/* Navigation Menu */}
-            <ul className="flex flex-col gap-4">
+            {/* Navigation Menu */}{
+              info === "admin" || info === "hr" ?  <ul className="flex flex-col gap-4">
               {dataNav.map((item) => (
                 <li
                   key={item.id}
@@ -89,7 +118,37 @@ const Sidebar = () => {
                   </Link>
                 </li>
               ))}
+            </ul>:  <ul className="flex flex-col gap-4">
+              {dataNavStaff.map((item) => (
+                <li
+                  key={item.id}
+                  className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
+                    isActive === item.id
+                      ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
+                      : " text-[#A0AEC0]"
+                  }`}
+                  onClick={() => setIsActive(item.id)}
+                >
+                  <span
+                    className={`text-xl p-2 rounded-xl  ${
+                      isActive === item.id
+                        ? "text-[white] bg-[#FFD700]"
+                        : "text-[#FFD700] bg-white "
+                    }`}
+                  >
+                    {item.icon}
+                  </span>
+                  <Link
+                    href={item.link}
+                    className="hidden lg:block text-base transition-all duration-200 font-semibold"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
+            }
+           
           </div>
           <ThemeToggle />
           {/* Theme Toggle */}
