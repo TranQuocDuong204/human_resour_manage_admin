@@ -40,6 +40,7 @@ const AddEmployeePage = () => {
   const supabase = createClient();
   const router = useRouter();
   const [valueInputEmployee, setValueInputEmployee] = useState({
+    id: "",
     phone_number: 0,
     avatar: "",
     date_of_birth: "",
@@ -128,7 +129,46 @@ const AddEmployeePage = () => {
 
   const handleSave = async () => {
     if (isEdit) {
-      alert("Edit employee");
+      const employee_id = valueInputEmployee.id;
+      console.log(valueInputEmployee.id);
+      setIsLoading(true);
+      try {
+        const res = await fetch(
+          `http://127.0.0.1:8000/employees/${employee_id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(valueInputEmployee),
+          }
+        );
+
+        const datas = await res.json();
+        if (datas.message) {
+          toast({
+            variant: "default",
+            title: `Success`,
+            description: `${datas.message}`,
+          });
+          router.push("/dashboard/employees");
+        } else {
+          toast({
+            variant: "destructive",
+            title: `Error`,
+            description: `${datas.message}`,
+          });
+        }
+        setIsLoading(false);
+      } catch (error) {
+        toast({
+          variant: "destructive",
+          title: `Error`,
+          description: `${error}`,
+        });
+      } finally {
+        setIsLoading(false);
+      }
     } else {
       valueInputEmployee.phone_number = Number(valueInputEmployee.phone_number);
       valueInputEmployee.working_date = Number(valueInputEmployee.working_date);
@@ -150,8 +190,6 @@ const AddEmployeePage = () => {
         isActive: true,
         user_id: parsedAuth.response.user_id,
         deparment_id: valueInputEmployee.department_id
-          ? valueInputEmployee.department_id
-          : null,
       };
       try {
         const res = await fetch("http://127.0.0.1:8000/employees/", {
@@ -191,19 +229,22 @@ const AddEmployeePage = () => {
   };
 
   const getApiEmployee = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch("http://127.0.0.1:8000/employees/");
       const result = await res.json();
       const dataPersonnal = result.find(
         (i: any) => i.user_id === parsedAuth.response.user_id
       );
-      console.log(dataPersonnal);
       if (dataPersonnal) {
         setValueInputEmployee(dataPersonnal);
         setIsEdit(true);
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -239,6 +280,7 @@ const AddEmployeePage = () => {
             valueInputEmployee={valueInputEmployee}
             getValueInput={getValueInput}
             handleGetImg={handleGetImg}
+            isLoading={isLoading}
           />
         </TabsContent>
 
@@ -246,6 +288,7 @@ const AddEmployeePage = () => {
           <ProfessionalInformationForm
             valueInputEmployee={valueInputEmployee}
             getValueInput={getValueInput}
+            isLoading={isLoading}
           />
         </TabsContent>
 
