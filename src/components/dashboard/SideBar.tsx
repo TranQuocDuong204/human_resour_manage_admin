@@ -1,13 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { RxDashboard } from "react-icons/rx";
 import { MdGroups2 } from "react-icons/md";
 import { FaUsersGear } from "react-icons/fa6";
 import { GoProjectRoadmap } from "react-icons/go";
-import { MdOutlineSpaceDashboard } from "react-icons/md";
-import { CiLight } from "react-icons/ci";
-import { MdOutlineDarkMode } from "react-icons/md";
 import { IoHome } from "react-icons/io5";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,9 +12,12 @@ import ThemeToggle from "./ThemeToggle";
 const Sidebar = () => {
   const [isActive, setIsActive] = useState<null | number>(1);
   const pathName = usePathname();
-  const auth = localStorage.getItem("auth") ?? null;
+  const auth =
+    typeof window !== "undefined"
+      ? localStorage.getItem("auth") ?? null
+      : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
-  const info = parsedAuth.response.role
+  const info = parsedAuth?.response?.role;
 
   useEffect(() => {
     const index = dataNav.findIndex((item) => item.link === pathName);
@@ -50,7 +49,6 @@ const Sidebar = () => {
       link: "/dashboard/projects",
     },
   ];
-
 
   const dataNavStaff = [
     {
@@ -89,66 +87,68 @@ const Sidebar = () => {
               {/* <h2 className=" text-3xl uppercase">Picon</h2> */}
             </div>
 
-            {/* Navigation Menu */}{
-              info === "admin" || info === "hr" ?  <ul className="flex flex-col gap-4">
-              {dataNav.map((item) => (
-                <li
-                  key={item.id}
-                  className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
-                    isActive === item.id
-                      ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
-                      : " text-[#A0AEC0]"
-                  }`}
-                  onClick={() => setIsActive(item.id)}
-                >
-                  <span
-                    className={`text-xl p-2 rounded-xl  ${
+            {/* Navigation Menu */}
+            {info === "admin" || info === "hr" ? (
+              <ul className="flex flex-col gap-4">
+                {dataNav.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
                       isActive === item.id
-                        ? "text-[white] bg-[#FFD700]"
-                        : "text-[#FFD700] bg-white "
+                        ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
+                        : " text-[#A0AEC0]"
                     }`}
+                    onClick={() => setIsActive(item.id)}
                   >
-                    {item.icon}
-                  </span>
-                  <Link
-                    href={item.link}
-                    className="hidden lg:block text-base transition-all duration-200 font-semibold"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>:  <ul className="flex flex-col gap-4">
-              {dataNavStaff.map((item) => (
-                <li
-                  key={item.id}
-                  className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
-                    isActive === item.id
-                      ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
-                      : " text-[#A0AEC0]"
-                  }`}
-                  onClick={() => setIsActive(item.id)}
-                >
-                  <span
-                    className={`text-xl p-2 rounded-xl  ${
+                    <span
+                      className={`text-xl p-2 rounded-xl  ${
+                        isActive === item.id
+                          ? "text-[white] bg-[#FFD700]"
+                          : "text-[#FFD700] bg-white "
+                      }`}
+                    >
+                      {item.icon}
+                    </span>
+                    <Link
+                      href={item.link}
+                      className="hidden lg:block text-base transition-all duration-200 font-semibold"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="flex flex-col gap-4">
+                {dataNavStaff.map((item) => (
+                  <li
+                    key={item.id}
+                    className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
                       isActive === item.id
-                        ? "text-[white] bg-[#FFD700]"
-                        : "text-[#FFD700] bg-white "
+                        ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
+                        : " text-[#A0AEC0]"
                     }`}
+                    onClick={() => setIsActive(item.id)}
                   >
-                    {item.icon}
-                  </span>
-                  <Link
-                    href={item.link}
-                    className="hidden lg:block text-base transition-all duration-200 font-semibold"
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            }
-           
+                    <span
+                      className={`text-xl p-2 rounded-xl  ${
+                        isActive === item.id
+                          ? "text-[white] bg-[#FFD700]"
+                          : "text-[#FFD700] bg-white "
+                      }`}
+                    >
+                      {item.icon}
+                    </span>
+                    <Link
+                      href={item.link}
+                      className="hidden lg:block text-base transition-all duration-200 font-semibold"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <ThemeToggle />
           {/* Theme Toggle */}

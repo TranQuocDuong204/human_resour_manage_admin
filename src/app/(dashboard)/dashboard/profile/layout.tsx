@@ -34,7 +34,6 @@ const menuProfile = [
   },
 ];
 const ProfileLayout = ({ children }: { children: ReactNode }) => {
-
   const pathName = usePathname();
   const [isActive, setIsActive] = useState<null | number>(1);
   useEffect(() => {
@@ -44,30 +43,30 @@ const ProfileLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <div className="m-2 bg-white ">
-       
         {role === "admin" || role === "hr" ? (
-           <ul className="w-full flex gap-1 rounded-md ">
-          {menuProfile.map((item) => {
-            return (
-              <Link key={item.id} href={item.link} className="text-start">
-                <li
-                  className={`flex items-center justify-start gap-1 border-b-4 leading-6 px-6 py-2 font-semibold text-gray-700 rounded-md transition-all duration-300 
+          <ul className="w-full flex gap-1 rounded-md ">
+            {menuProfile.map((item) => {
+              return (
+                <Link key={item.id} href={item.link} className="text-start">
+                  <li
+                    className={`flex items-center justify-start gap-1 border-b-4 leading-6 px-6 py-2 font-semibold text-gray-700 rounded-md transition-all duration-300 
           ${
             isActive === item.id
               ? "border-b-4 border-[#FFD700] text-black bg-[#FFD700] bg-opacity-10"
               : "hover:bg-[#E2E8F0] hover:text-black"
           }`}
-                >
-                  <span className="px-0 sm:px-4 md:px-0">{item.icon}</span>
+                  >
+                    <span className="px-0 sm:px-4 md:px-0">{item.icon}</span>
 
-                  <span className=" hidden  md:block ">{item.name}</span>
-                </li>
-              </Link>
-            );
-          })}
-        </ul> 
-        ):  <h2>{pathName}</h2>}
-        
+                    <span className=" hidden  md:block ">{item.name}</span>
+                  </li>
+                </Link>
+              );
+            })}
+          </ul>
+        ) : (
+          <h2>{pathName}</h2>
+        )}
       </div>
       <section className="flex flex-row">{children}</section>
     </>

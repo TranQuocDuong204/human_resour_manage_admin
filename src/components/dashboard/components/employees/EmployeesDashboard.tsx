@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import EmployeesAction from "./EmployeesAction";
 import EmployeesTable from "./EmployeesTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import handleApi from "@/config/handleApi";
 const EmployeesDashboard = () => {
   const [dataEmployee, setDataEmployee] = useState<any[]>([]);
   const [dataUser, setDataUser] = useState<any[]>([]);
@@ -13,8 +14,8 @@ const EmployeesDashboard = () => {
   const getDataEmployee = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/employees/");
-      const result = await res.json();
+      const res = await handleApi("/employees/");
+      const result = res.data;
       const newData = result.filter((item: any) => item.is_active === true);
       setDataEmployee(newData);
       setIsLoading(false);
@@ -27,8 +28,8 @@ const EmployeesDashboard = () => {
 
   const getDataUser = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/users/");
-      const result = await res.json();
+      const res = await handleApi("/users/");
+      const result = res.data;
       setDataUser(result);
     } catch (error) {
       console.log(error);
@@ -36,8 +37,8 @@ const EmployeesDashboard = () => {
   };
   const getDataDepartment = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/departments/");
-      const result = await res.json();
+      const res = await handleApi("/departments/");
+      const result = res.data;
       setDataDepartment(result);
     } catch (error) {
       console.log(error);
@@ -55,16 +56,17 @@ const EmployeesDashboard = () => {
     getDataDepartment();
   }, []);
 
-
   const handleSearch = useMemo(() => {
-    if (valueSearch.trim() === '') {
-        return dataEmployee;
-      }  
+    if (valueSearch.trim() === "") {
+      return dataEmployee;
+    }
     const filterSearch = dataUser.filter((item: any) =>
       item.username.toLowerCase().includes(valueSearch.toLowerCase())
     );
+    const userId = filterSearch.map((item: any) => item.id);
+
     const filterSearch2 = dataEmployee.filter((item: any) =>
-      item.user_id === filterSearch[0]?.id
+      item.user_id.includes(userId)
     );
     return filterSearch2;
   }, [valueSearch]);

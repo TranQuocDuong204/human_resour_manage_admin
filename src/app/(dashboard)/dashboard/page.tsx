@@ -125,7 +125,10 @@ const DailyTaskDashboard = dynamic(
 
 const DashboardPage = () => {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const auth = localStorage.getItem("auth") ?? null;
+  const auth =
+    typeof window !== "undefined"
+      ? localStorage.getItem("auth") ?? null
+      : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   const authorized = parsedAuth?.response?.role || {};
   return (

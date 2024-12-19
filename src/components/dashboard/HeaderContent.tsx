@@ -19,7 +19,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlices";
 import { useRouter } from "next/navigation";
 const HeaderContent = () => {
-  const auth = localStorage.getItem("auth") ?? null;
+  const auth = typeof window !== "undefined" ? localStorage.getItem("auth") ?? null : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   const info = parsedAuth.response;
   const pathname = usePathname();
