@@ -52,15 +52,10 @@ const ModalFilter = ({ isOpen, setIsOpen, isDeletedId }: any) => {
   ];
 
   const handleCheckboxChange = (checked: any, id: string) => {
-    
-    setSelectedCheck((prev) => checked ? [...prev, id] : prev.filter(item => item !== id))
-    // if (checked) {
-    //   setSelectedCheck((prev) => [...prev, id]);
-    // } else {
-    //   setSelectedCheck((prev) => prev.filter((item) => item !== id));
-    // }
+    setSelectedCheck((prev) =>
+      checked ? [...prev, id] : prev.filter((item) => item !== id)
+    );
   };
-console.log(selectedCheck);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -70,12 +65,12 @@ console.log(selectedCheck);
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
       >
-        <DialogHeader>
+        <DialogHeader className="text-left sm:text-left">
           <DialogTitle className=" text-2xl font-bold ">Filter</DialogTitle>
 
           <div>
             <h2 className=" text-lg font-semibold">Department</h2>
-            <div className="grid grid-cols-2 gap-2 mt-3">
+            <div className="grid grid-cols-2 gap-2 mt-3 flex-wrap">
               {items.map((item: any) => (
                 <div key={item.id} className="basis-1/2 ">
                   <Checkbox

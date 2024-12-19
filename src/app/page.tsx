@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const auth = localStorage.getItem("auth") ?? null;
+  const auth = typeof window !== "undefined" ? localStorage.getItem("auth") ?? null : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   
   useEffect(() => {

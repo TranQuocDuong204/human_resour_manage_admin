@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import Loader from "../../Loader";
+import handleApi from "@/config/handleApi";
 const ProfessionalInformationForm = ({
   valueInputEmployee,
   getValueInput,
@@ -12,15 +13,14 @@ const ProfessionalInformationForm = ({
 
   useEffect(() => {
     async function fetchDataDepartment() {
-      const res = await fetch("http://localhost:8000/departments/");
-      const data = await res.json();
-
+      const res = await handleApi("/departments/");
+      const data = res.data;
       setValueDepartment(data);
     }
 
     fetchDataDepartment();
   }, []);
-console.log(valueInputEmployee.department_id);
+
 
 
   return (

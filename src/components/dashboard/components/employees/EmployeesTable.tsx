@@ -8,15 +8,14 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { IoEyeOutline } from "react-icons/io5";
-import { CiEdit } from "react-icons/ci";
 import { FiTrash2 } from "react-icons/fi";
-import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/hooks/use-toast";
 import { IEmployee } from "@/types/Employees";
 import Loader from "../../Loader";
 import { useState, useEffect } from "react";
 import ModalCheck from "./modals/ModalCheck";
 import ModalView from "./modals/ModalView";
+import handleApi from "@/config/handleApi";
 
 interface EmployeesTableProps {
   isLoading: boolean;
@@ -25,7 +24,7 @@ interface EmployeesTableProps {
   setDataEmployee: (data: any) => void;
   dataUser: any[];
   handleSearch: any[];
-  dataDepartment: any[];
+  dataDepartment: [];
 }
 
 interface IEmployeeData {
@@ -57,14 +56,12 @@ const EmployeesTable = ({
   const handleDeleted = async (id: any) => {
     setIsLoadingDelete(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/employees/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ is_active: false }),
-      });
-      const data = await res.json();
+      const res = await handleApi(
+        `/employees/${id}`,
+        { is_active: false },
+        "put"
+      );
+      const data = res.data;
       const dataRemove = data.data.find((item: any) => item);
       setDataEmployee((prev: any) =>
         prev.filter((item: any) => item.id !== dataRemove.id)
@@ -101,13 +98,10 @@ const EmployeesTable = ({
     setDataDetailEmployee(inforDetail);
   };
 
-
   const handleView = (id: string) => {
     handleGetDetail(id);
     setIsOpenView(true);
   };
-
-
 
   return (
     <div className=" mt-4">
@@ -196,7 +190,7 @@ const EmployeesTable = ({
                 );
               })}
             </TableBody>
-          ) :  (
+          ) : (
             <TableBody>
               {dataEmployee.map((i: any) => {
                 return (

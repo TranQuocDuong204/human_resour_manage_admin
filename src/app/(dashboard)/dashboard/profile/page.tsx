@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import PersonalInfomationForm from "@/components/dashboard/components/profile/PersonalInfomationForm";
 import ProfessionalInformationForm from "@/components/dashboard/components/profile/ProfessionalInformationForm";
 import DocumentsForm from "@/components/dashboard/components/profile/DocumentsForm";
-
+import handleApi from "@/config/handleApi";
 const schemaInfoEmloyee = z.object({
   phone_number: z.number().positive(),
   avatar: z.string().optional(),
@@ -56,7 +56,7 @@ const AddEmployeePage = () => {
     user_id: "",
     department_id: "",
   });
-  const auth = localStorage.getItem("auth") ?? null;
+  const auth = typeof window !== "undefined" ? localStorage.getItem("auth") ?? null : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   useEffect(() => {
     getApiEmployee();
@@ -129,22 +129,26 @@ const AddEmployeePage = () => {
 
   const handleSave = async () => {
     if (isEdit) {
+      const result = schemaInfoEmloyee.safeParse(valueInputEmployee);
+      if (!result.success) {
+        toast({
+          variant: "destructive",
+          title: `Error!!!`,
+          description: "Please enter complete information",
+        });
+        setIsLoading(false);
+        return;
+      }
       const employee_id = valueInputEmployee.id;
-      console.log(valueInputEmployee.id);
       setIsLoading(true);
       try {
-        const res = await fetch(
-          `http://127.0.0.1:8000/employees/${employee_id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(valueInputEmployee),
-          }
+        const res = await handleApi(
+          `/employees/${employee_id}`,
+          valueInputEmployee,
+          "put"
         );
+        const datas = res.data;
 
-        const datas = await res.json();
         if (datas.message) {
           toast({
             variant: "default",
@@ -176,11 +180,10 @@ const AddEmployeePage = () => {
 
       const result = schemaInfoEmloyee.safeParse(valueInputEmployee);
       if (!result.success) {
-        const errors = result.error.errors.map((err) => err.message).join(", ");
         toast({
           variant: "destructive",
           title: `Error`,
-          description: errors,
+          description: "Please enter complete information",
         });
         setIsLoading(false);
         return;
@@ -189,18 +192,11 @@ const AddEmployeePage = () => {
         ...valueInputEmployee,
         isActive: true,
         user_id: parsedAuth.response.user_id,
-        deparment_id: valueInputEmployee.department_id
+        deparment_id: valueInputEmployee.department_id,
       };
       try {
-        const res = await fetch("http://127.0.0.1:8000/employees/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        const datas = await res.json();
+        const res = await handleApi("/employees/", data, "post");
+        const datas = res.data;
         if (datas.message) {
           toast({
             variant: "default",
@@ -231,8 +227,8 @@ const AddEmployeePage = () => {
   const getApiEmployee = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://127.0.0.1:8000/employees/");
-      const result = await res.json();
+      const res = await handleApi("/employees/");
+      const result = await res.data;
       const dataPersonnal = result.find(
         (i: any) => i.user_id === parsedAuth.response.user_id
       );
