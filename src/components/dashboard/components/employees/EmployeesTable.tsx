@@ -12,19 +12,30 @@ import { FiTrash2 } from "react-icons/fi";
 import { toast } from "@/hooks/use-toast";
 import { IEmployee } from "@/types/Employees";
 import Loader from "../../Loader";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ModalCheck from "./modals/ModalCheck";
 import ModalView from "./modals/ModalView";
 import handleApi from "@/config/handleApi";
 
+const tableHeader: ITableHeader[] = [
+  { label: "Avatar", width: "10%" },
+  { label: "Employees Name", width: "20%" },
+  { label: "Department", width: "15%" },
+  { label: "Position", width: "14%" },
+  { label: "Employee Type", width: "15%" },
+  { label: "Office Location", width: "15%" },
+  { label: "Status", width: "15%" },
+];
+
+interface ITableHeader {
+  label: string;
+  width: string;
+}
 interface EmployeesTableProps {
   isLoading: boolean;
   dataEmployee: IEmployee[];
-  getNameUser: (id: any) => string;
   setDataEmployee: (data: any) => void;
-  dataUser: any[];
-  handleSearch: any[];
-  dataDepartment: [];
+  // handleSearch: any[];
 }
 
 interface IEmployeeData {
@@ -37,15 +48,13 @@ interface IEmployeeData {
   office_location?: string;
   employee_type?: string;
 }
+
 const EmployeesTable = ({
   isLoading,
   dataEmployee,
-  dataDepartment,
-  getNameUser,
   setDataEmployee,
-  dataUser,
-  handleSearch,
-}: EmployeesTableProps) => {
+}: // handleSearch,
+EmployeesTableProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenView, setIsOpenView] = useState(false);
   const [idEmployees, setIdEmployees] = useState("");
@@ -80,172 +89,102 @@ const EmployeesTable = ({
     }
   };
 
-  const handleGetDetail = async (id: string) => {
-    const dataDetail = dataEmployee.filter((item: any) => item.id === id);
-
-    const dataNewDetail = dataUser.find(
-      (item: any) => item.id === dataDetail[0].user_id
-    );
-    const dataNewDepartment = dataDepartment.find(
-      (item: any) => item.id === dataDetail[0]?.department_id
-    );
-    const inforDetail = {
-      ...dataDetail[0],
-      email: dataNewDetail.email,
-      userName: dataNewDetail.username,
-      departmentName: dataNewDepartment?.name_department,
-    };
-    setDataDetailEmployee(inforDetail);
-  };
-
-  const handleView = (id: string) => {
-    handleGetDetail(id);
+  const handleView = (item: any) => {
+    setDataDetailEmployee(item);
     setIsOpenView(true);
   };
 
   return (
-    <div className=" mt-4">
-      {isLoading ? (
-        <div
-          className="
-         flex justify-center items-center p-4
-        "
-        >
-          <Loader />
-        </div>
-      ) : (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className=" font-normal text-gray-500 dark:text-white">
-                Employees Name
+    <div className="mt-3 relative ">
+      <Table className="w-full">
+        <TableHeader className="sticky top-0 bg-white dark:bg-gray-800 z-10">
+          <TableRow>
+            {tableHeader.map((header, index) => (
+              <TableHead
+                key={index}
+                className="font-normal text-gray-500 dark:text-white"
+                style={{ width: header.width }}
+              >
+                {header.label}
               </TableHead>
-              <TableHead className=" font-normal text-gray-500 dark:text-white">
-                Employees ID
-              </TableHead>
-              <TableHead className=" font-normal text-gray-500 dark:text-white">
-                Position
-              </TableHead>
-              <TableHead className=" font-normal text-gray-500 dark:text-white">
-                Employee_Type
-              </TableHead>
-              <TableHead className=" font-normal text-gray-500 dark:text-white">
-                Office_Location
-              </TableHead>
-              <TableHead className=" font-normal text-gray-500 dark:text-white">
-                Status
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          {handleSearch.length > 0 ? (
-            <TableBody>
-              {handleSearch.map((i: any) => {
-                return (
-                  <TableRow className="p-2" key={i.id}>
-                    <TableCell className="font-medium flex items-center">
+            ))}
+          </TableRow>
+        </TableHeader>
+      </Table>
+      <div className=" h-[300px] overflow-y-auto  border rounded-md">
+        <Table className=" w-full ">
+          <TableBody>
+            {isLoading ? (
+              <TableRow>
+                <TableCell colSpan={7} className="h-full">
+                  {" "}
+                  {/* Adjusted to match the correct number of columns */}
+                  <div className="flex justify-center items-center h-[320px]">
+                    <Loader />
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : dataEmployee?.length > 0 ? (
+              dataEmployee.map((i: any) => (
+                <TableRow key={i.id} className="min-h-[50px]">
+                  <TableCell className="font-medium w-[10%]">
+                    <div className="flex items-center">
                       <Avatar>
                         <AvatarImage
-                          src={
-                            i.avatar
-                              ? i.avatar
-                              : "https://github.com/shadcn.png"
-                          }
+                          src={i.avatar || "https://github.com/shadcn.png"}
                           className="h-10 w-10 rounded-full"
                         />
                       </Avatar>
-                      <span className="ml-2">{getNameUser(i.user_id)}</span>
-                    </TableCell>
-                    <TableCell>{i?.id?.slice(0, 8)}...</TableCell>
-                    <TableCell>{i.position}</TableCell>
-                    <TableCell>{i.employee_type}</TableCell>
-                    <TableCell>{i.office_location}</TableCell>
-                    <TableCell className="flex items-center text-lg gap-3 mb-5">
+                    </div>
+                  </TableCell>
+                  <TableCell className="w-[20%]">
+                    {i?.users?.username}
+                  </TableCell>
+                  <TableCell className="w-[15%]">
+                    {i?.departments?.name_department}
+                  </TableCell>
+                  <TableCell className="w-[15%]">{i.position}</TableCell>
+                  <TableCell className="w-[15%]">{i.employee_type}</TableCell>
+                  <TableCell className="w-[15%]">{i.office_location}</TableCell>
+                  <TableCell className="w-[15%]">
+                    <div className="flex items-center text-lg gap-3">
                       <IoEyeOutline
                         className="cursor-pointer"
-                        onClick={() => handleView(i.id)}
+                        onClick={() => handleView(i)}
                       />
                       <FiTrash2
                         className="cursor-pointer"
-                        onClick={() => (
-                          setIsOpen(!isOpen), setIdEmployees(i.id)
-                        )}
-                      />
-                      <ModalCheck
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        isDeletedId={idEmployees}
-                        handleDeleted={(id: any) => {
-                          handleDeleted(id);
+                        onClick={() => {
+                          setIsOpen(!isOpen);
+                          setIdEmployees(i.id);
                         }}
-                        isLoadingDelete={isLoadingDelete}
                       />
-                      <ModalView
-                        isOpenView={isOpenView}
-                        setIsOpenView={setIsOpenView}
-                        iddEmployees={idEmployees}
-                        dataDetailEmployee={dataDetailEmployee}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          ) : (
-            <TableBody>
-              {dataEmployee.map((i: any) => {
-                return (
-                  <TableRow className="p-2" key={i.id}>
-                    <TableCell className="font-medium flex items-center">
-                      <Avatar>
-                        <AvatarImage
-                          src={
-                            i.avatar
-                              ? i.avatar
-                              : "https://github.com/shadcn.png"
-                          }
-                          className="h-10 w-10 rounded-full"
-                        />
-                      </Avatar>
-                      <span className="ml-2">{getNameUser(i.user_id)}</span>
-                    </TableCell>
-                    <TableCell>{i?.id?.slice(0, 8)}...</TableCell>
-                    <TableCell>{i.position}</TableCell>
-                    <TableCell>{i.employee_type}</TableCell>
-                    <TableCell>{i.office_location}</TableCell>
-                    <TableCell className="flex items-center text-lg gap-3 mb-5">
-                      <IoEyeOutline
-                        className="cursor-pointer"
-                        onClick={() => handleView(i.id)}
-                      />
-                      <FiTrash2
-                        className="cursor-pointer"
-                        onClick={() => (
-                          setIsOpen(!isOpen), setIdEmployees(i.id)
-                        )}
-                      />
-                      <ModalCheck
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        isDeletedId={idEmployees}
-                        handleDeleted={(id: any) => {
-                          handleDeleted(id);
-                        }}
-                        isLoadingDelete={isLoadingDelete}
-                      />
-                      <ModalView
-                        isOpenView={isOpenView}
-                        setIsOpenView={setIsOpenView}
-                        iddEmployees={idEmployees}
-                        dataDetailEmployee={dataDetailEmployee}
-                      />
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center">
+                  No data available
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
         </Table>
-      )}
+      </div>
+      <ModalCheck
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        isDeletedId={idEmployees}
+        handleDeleted={handleDeleted}
+        isLoadingDelete={isLoadingDelete}
+      />
+      <ModalView
+        isOpenView={isOpenView}
+        setIsOpenView={setIsOpenView}
+        dataDetailEmployee={dataDetailEmployee}
+      />
     </div>
   );
 };

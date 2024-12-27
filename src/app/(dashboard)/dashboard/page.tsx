@@ -135,7 +135,7 @@ const DashboardPage = () => {
     <section className="">
       {authorized === "admin" || authorized === "hr" ? (
         <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grid-flow-row p-2 lg:p-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 grid-flow-row p-2 lg:p-1">
             <div className="col-span-1 lg:col-span-2 ">
               <TotalDashboard dataBoxs={dataBoxs} />
 

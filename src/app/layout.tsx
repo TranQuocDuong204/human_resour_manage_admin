@@ -20,7 +20,7 @@ export default function RootLayout({
       </head>
       <body>
         <ThemeProvider attribute="class">
-          <div className="max-w-screen-2xl text-base mx-auto">
+          <div className="max-w-screen-2xl text-base mx-auto ">
             <ReduxProvider>{children}</ReduxProvider>
 
             <Toaster />

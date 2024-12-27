@@ -5,11 +5,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import DashboardPage from "./(dashboard)/dashboard/page";
 import DashboardLayout from "./(dashboard)/dashboard/layout";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const auth = typeof window !== "undefined" ? localStorage.getItem("auth") ?? null : false;
+  const auth =  localStorage.getItem("auth") ?? null;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   
   useEffect(() => {
