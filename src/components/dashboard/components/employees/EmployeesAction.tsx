@@ -10,7 +10,6 @@ import dynamic from "next/dynamic";
 import FilterEmployees from "./components/FilterEmployees";
 import BtnExportExcel from "./components/BtnExportExcel";
 
-
 const ModalAddEmployees = dynamic(() => import("./modals/ModalAddEmployees"), {
   ssr: false,
 });
@@ -24,7 +23,6 @@ interface EmployeesActionProps {
 
 const EmployeesAction = ({
   onSearch,
-  dataDepartment,
   dataEmployee,
   setLabelFilter,
   labelFilter,
@@ -36,7 +34,6 @@ const EmployeesAction = ({
   const parsedAuth = auth ? JSON.parse(auth) : null;
   const info = parsedAuth.response;
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenFilter, setIsOpenFilter] = useState(false);
 
   return (
     <div className="flex flex-col space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0 gap-2">
@@ -50,7 +47,7 @@ const EmployeesAction = ({
 
         <Button
           variant={"outline"}
-          className="px-5 flex items-center bg-black text-white font-semibold space-x-2 dark:bg-white dark:text-black"
+          className="px-5 flex items-center bg-black text-white font-semibold space-x-2 dark:bg-white dark:text-black border-2 border-[#FFD700]"
           onClick={() => setIsOpen(!isOpen)}
         >
           {" "}

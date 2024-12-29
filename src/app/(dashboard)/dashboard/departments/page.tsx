@@ -2,7 +2,7 @@ import DepartmentsDashboard from "@/components/dashboard/components/departments/
 
 const DepartmentsPage = () => {
   return (
-    <div className=" m-4">
+    <div className=" m-3">
       <DepartmentsDashboard nameTitle="Departments Manager" />
     </div>
   );

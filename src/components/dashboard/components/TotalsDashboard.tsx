@@ -72,7 +72,7 @@ const TotalDashboard = ({ dataBoxs }: any) => {
           },
           index: Key | null | undefined
         ): any => {
-          return <TotalItem item={item} index={index} key={index} />;
+          return <TotalItem item={item} index={index} key={index}/>;
         }
       )}
     </div>
