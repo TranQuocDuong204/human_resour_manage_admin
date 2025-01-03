@@ -94,6 +94,7 @@ EmployeesTableProps) => {
     setIsOpenView(true);
   };
 
+  
   return (
     <div className="mt-3 relative ">
       <Table className="w-full">

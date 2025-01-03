@@ -24,7 +24,7 @@ interface IIsOpenProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const HeaderContent = ({isOpen, setIsOpen}: IIsOpenProps) => {
+const HeaderContent = ({ isOpen, setIsOpen }: IIsOpenProps) => {
   const auth =
     typeof window !== "undefined"
       ? localStorage.getItem("auth") ?? null
@@ -48,9 +48,12 @@ const HeaderContent = ({isOpen, setIsOpen}: IIsOpenProps) => {
     router.push("/dashboard/profile");
   };
   return (
-    <section className="sticky top-0 left-0 z-50 bg-white dark:bg-[black] dark:border-[white] p-2 mb-5 shadow-sm rounded-sm">
+    <section className="sticky top-0 left-0 z-50 bg-white dark:bg-[black] dark:border-[white] p-2 mb-5 shadow ">
       <div className="flex justify-between items-center  px-3 sm:px-0">
-        <div className="block md:hidden cursor-pointer hover:text-slate-600" onClick={() => setIsOpen(!isOpen)}>
+        <div
+          className="block md:hidden cursor-pointer hover:text-slate-600"
+          onClick={() => setIsOpen(!isOpen)}
+        >
           <TiThMenu className=" text-2xl" />
         </div>
         <div className="md:flex md:flex-col hidden ">
@@ -60,66 +63,28 @@ const HeaderContent = ({isOpen, setIsOpen}: IIsOpenProps) => {
                 dashboard: { href: "/dashboard", label: "Dashboard" },
                 employees: { href: "/dashboard/employees", label: "Employees" },
                 profile: { href: "/dashboard/profile", label: "Profile" },
-                departments: { href: "/dashboard/departments", label: "Departments" },
+                departments: {
+                  href: "/dashboard/departments",
+                  label: "Departments",
+                },
               };
               const pathItem = pathMap[i];
 
-              if (!pathItem) return null; // Skip invalid paths
-            
+              if (!pathItem) return null;
+
               return (
                 <Link
                   href={pathItem.href}
                   key={index}
-                  className={`text-base flex items-center ${
-                    i === "dashboard" ? "" : "flex items-center"
+                  className={` flex items-center ml-2 text-sm font-medium ${
+                    i === "dashboard" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                   } text-slate-500 dark:text-white`}
                 >
-                  {i !== "dashboard" && <MdNavigateNext />}
+                  {i !== "dashboard" && <MdNavigateNext className="mr-2" />}
                   {pathItem.label}
                 </Link>
               );
-              // if (i === "dashboard") {
-              //   return (
-              //     <Link
-              //       href={`/dashboard`}
-              //       key={index}
-              //       className=" text-base text-slate-500 dark:text-white"
-              //     >
-              //       Dashboard
-              //     </Link>
-              //   );
-              // } else if (i === "employees") {
-              //   return (
-              //     <Link
-              //       href={`/dashboard/employees`}
-              //       key={index}
-              //       className=" text-base flex items-center text-slate-500 dark:text-white"
-              //     >
-              //       <MdNavigateNext />
-              //       Employees
-              //     </Link>
-              //   );
-              // } else if (i === "profile") {
-              //   return (
-              //     <Link
-              //       href={`/dashboard/profile`}
-              //       key={index}
-              //       className=" text-base flex items-center text-slate-500 dark:text-white"
-              //     >
-              //       <MdNavigateNext /> Profile
-              //     </Link>
-              //   );
-              // } else if (i === "departments") {
-              //   return (
-              //     <Link
-              //       href={`/dashboard/departments`}
-              //       key={index}
-              //       className=" text-base flex items-center text-slate-500 dark:text-white"
-              //     >
-              //       <MdNavigateNext /> Departments
-              //     </Link>
-              //   );
-              // }
+              
             })}
           </h2>
         </div>

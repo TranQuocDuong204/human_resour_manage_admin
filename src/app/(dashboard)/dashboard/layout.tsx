@@ -8,7 +8,7 @@ import clsx from "clsx";
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <section className="flex flex-row gap-0 lg:gap-1 h-screen">
+    <section className="flex flex-row gap-0  h-screen">
       {/* Sidebar */}
       <Sidebar />
       {/* Main Content */}

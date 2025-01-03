@@ -5,11 +5,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import DashboardPage from "./(dashboard)/dashboard/page";
 import DashboardLayout from "./(dashboard)/dashboard/layout";
+
 const Home = () => {
   const [isLogin, setIsLogin] = useState(false);
-  const auth =  localStorage.getItem("auth") ?? null;
+  const auth = localStorage.getItem("auth") ?? null;
   const parsedAuth = auth ? JSON.parse(auth) : null;
-  
+
   useEffect(() => {
     if (parsedAuth) {
       setIsLogin(true);

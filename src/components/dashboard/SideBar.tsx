@@ -79,7 +79,7 @@ const Sidebar = () => {
   ];
   return (
     <>
-      <div className="w-0 md:w-[15%] lg:w-[20%] xl:w-[18%] overflow-y-auto bg-[#F8F9FA] dark:bg-[black] shadow-lg rounded-lg px-0 xl:px-4">
+      <div className="w-0 md:w-[15%] lg:w-[20%] xl:w-[18%] overflow-y-auto bg-[#F8F9FA] dark:bg-[black] shadow-md rounded-lg px-0 xl:px-4">
         <div className="flex flex-col justify-between h-full p-3">
           <div>
             {/* Logo */}
@@ -92,7 +92,8 @@ const Sidebar = () => {
             {info === "admin" || info === "hr" ? (
               <ul className="flex flex-col gap-4">
                 {dataNav.map((item) => (
-                  <li
+                  <Link
+                    href={item.link}
                     key={item.id}
                     className={clsx(
                       "flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300",
@@ -112,13 +113,10 @@ const Sidebar = () => {
                     >
                       {item.icon}
                     </span>
-                    <Link
-                      href={item.link}
-                      className="hidden lg:block text-base transition-all duration-200 font-semibold"
-                    >
+                    <span className="hidden lg:block text-base transition-all duration-200 font-semibold">
                       {item.name}
-                    </Link>
-                  </li>
+                    </span>
+                  </Link>
                 ))}
               </ul>
             ) : (

@@ -27,7 +27,7 @@ const ChartDashboard = () => {
   return (
     <ChartContainer
       config={chartConfig}
-      className="min-h-[100px] w-full shadow-md rounded-lg "
+      className="min-h-[100px] w-full shadow-sm rounded-lg "
     >
       <BarChart accessibilityLayer data={chartData} className="text-black">
         {" "}

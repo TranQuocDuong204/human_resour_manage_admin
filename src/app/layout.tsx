@@ -3,6 +3,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import ReduxProvider from "@/redux/ReduxProvider";
 import { ThemeProvider } from "next-themes";
+import NextTopLoader from "nextjs-toploader";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,7 +23,10 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute="class">
           <div className="max-w-screen-2xl text-base mx-auto ">
-            <ReduxProvider>{children}</ReduxProvider>
+            <ReduxProvider>
+              <NextTopLoader color="#FFD700" showSpinner={false} />
+              {children}
+            </ReduxProvider>
 
             <Toaster />
           </div>

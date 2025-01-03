@@ -4,7 +4,7 @@ import DepartmentItem from "./components/DepartmentItem";
 import handleApi from "@/config/handleApi";
 import clsx from "clsx";
 import SkeletonLoader from "./components/SkeletonLoader";
-const DepartmentsList = ({ valueSearch }: any) => {
+const DepartmentsList = ({ valueSearch, dataNewDepartment }: any) => {
   const [dataDepartment, setDataDepartment] = useState<any[]>([]);
   const [dataUser, setDataUser] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,9 +48,16 @@ const DepartmentsList = ({ valueSearch }: any) => {
   }, []);
 
   useEffect(() => {
-    getDataDepartment();
+    if (valueSearch) {
+      getDataDepartment();
+    }
   }, [valueSearch]);
 
+  useEffect(() => {
+    setDataDepartment((prev) => {
+      return [...prev, dataNewDepartment];
+    });
+  }, [dataNewDepartment]);
   return (
     <div>
       {isLoading ? (

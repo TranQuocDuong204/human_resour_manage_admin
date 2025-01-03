@@ -125,7 +125,7 @@ const EmployeesDashboard = () => {
 
               if (item.name === "Department") {
                 dataForFilter = dataDepartment.map(
-                  (item: any) => item.department_name
+                  (item: any) => item.name_department
                 );
               } else if (item.name === "Type Employees") {
                 dataForFilter = ["full-time", "part-time", "Remote"];

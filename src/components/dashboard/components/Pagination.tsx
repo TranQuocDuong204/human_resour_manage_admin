@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {
-  Pagination,
-  PaginationContent,
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import {
   Select,
@@ -22,16 +18,17 @@ export function PaginationDemo({
   setPageCurrent,
   setLimitPage,
 }: any) {
+  if (!dataPagination) return null;
   const [totalPages, setTotalPages] = useState(
-    Math.ceil(dataPagination.total_records / dataPagination.limit)
+    Math.ceil(dataPagination?.total_records / dataPagination?.limit)
   );
 
   useEffect(() => {
     setTotalPages(
-      Math.ceil(dataPagination.total_records / dataPagination.limit)
+      Math.ceil(dataPagination?.total_records / dataPagination?.limit)
     );
     setPageCurrent(1);
-  }, [dataPagination.total_records, dataPagination.limit]);
+  }, [dataPagination?.total_records, dataPagination?.limit]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -50,13 +47,13 @@ export function PaginationDemo({
     const pageNumbers = [];
     const maxVisiblePages = 5;
 
-    if (dataPagination.total_pages <= maxVisiblePages) {
-      for (let i = 1; i <= dataPagination.total_pages; i++) {
+    if (dataPagination?.total_pages <= maxVisiblePages) {
+      for (let i = 1; i <= dataPagination?.total_pages; i++) {
         pageNumbers.push(
           <PaginationItem key={i}>
             <PaginationLink
               href="#"
-              isActive={dataPagination.page === i}
+              isActive={dataPagination?.page === i}
               onClick={() => handlePageChange(i)}
             >
               {i}
@@ -70,7 +67,7 @@ export function PaginationDemo({
         <PaginationItem key={1}>
           <PaginationLink
             href="#"
-            isActive={dataPagination.page === 1}
+            isActive={dataPagination?.page === 1}
             onClick={() => handlePageChange(1)}
           >
             1
@@ -79,7 +76,7 @@ export function PaginationDemo({
       );
 
       // Add ellipsis if necessary
-      if (dataPagination.page > 3) {
+      if (dataPagination?.page > 3) {
         pageNumbers.push(
           <PaginationItem key="ellipsis-start">
             <PaginationEllipsis />
@@ -88,17 +85,17 @@ export function PaginationDemo({
       }
 
       // Add pages around current page
-      const startPage = Math.max(2, dataPagination.page - 1);
+      const startPage = Math.max(2, dataPagination?.page - 1);
       const endPage = Math.min(
-        dataPagination.total_pages - 1,
-        dataPagination.page + 1
+        dataPagination?.total_pages - 1,
+        dataPagination?.page + 1
       );
       for (let i = startPage; i <= endPage; i++) {
         pageNumbers.push(
           <PaginationItem key={i}>
             <PaginationLink
               href="#"
-              isActive={dataPagination.page === i}
+              isActive={dataPagination?.page === i}
               onClick={() => handlePageChange(i)}
             >
               {i}
@@ -108,7 +105,7 @@ export function PaginationDemo({
       }
 
       // Add ellipsis if necessary
-      if (dataPagination.page < dataPagination.total_pages - 2) {
+      if (dataPagination?.page < dataPagination?.total_pages - 2) {
         pageNumbers.push(
           <PaginationItem key="ellipsis-end">
             <PaginationEllipsis />
@@ -116,15 +113,14 @@ export function PaginationDemo({
         );
       }
 
-      // Always show last page
       pageNumbers.push(
-        <PaginationItem key={`"page+"${dataPagination.total_pages}`}>
+        <PaginationItem key={`"page+"${dataPagination?.total_pages}`}>
           <PaginationLink
             href="#"
-            isActive={dataPagination.page === dataPagination.total_pages}
-            onClick={() => handlePageChange(dataPagination.total_pages)}
+            isActive={dataPagination?.page === dataPagination?.total_pages}
+            onClick={() => handlePageChange(dataPagination?.total_pages)}
           >
-            {dataPagination.total_pages}
+            {dataPagination?.total_pages}
           </PaginationLink>
         </PaginationItem>
       );
@@ -141,14 +137,18 @@ export function PaginationDemo({
             Page:
           </Label>
           <Select
+            value={dataPagination?.page + ""}
             onValueChange={(value) => handlePageChange(parseInt(value, 10))}
           >
-            <SelectTrigger className="w-[150px] dark:border-2  dark:border-[#2D3748]" id="pageSelect">
+            <SelectTrigger
+              className="w-[150px] dark:border-2  dark:border-[#2D3748]"
+              id="pageSelect"
+            >
               <SelectValue placeholder="Select page" />
             </SelectTrigger>
             <SelectContent>
               {Array.from(
-                { length: dataPagination.total_pages },
+                { length: dataPagination?.total_pages },
                 (_, i) => i + 1
               ).map((page) => (
                 <SelectItem key={page} value={page.toString()}>
@@ -157,13 +157,19 @@ export function PaginationDemo({
               ))}
             </SelectContent>
           </Select>
+          <span className="text-sm text-muted-foreground">
+            of {dataPagination?.total_pages}
+          </span>
         </div>
         <div className="flex items-center space-x-2">
-          <Label htmlFor="itemsPerPageSelect" className="whitespace-nowrap">
+          <Label htmlFor="itemsPerPageSelect" className="whitespace-nowrap ">
             Items per page:
           </Label>
           <Select onValueChange={handleItemsPerPageChange}>
-            <SelectTrigger className="w-[100px] dark:border-2  dark:border-[#2D3748]" id="itemsPerPageSelect">
+            <SelectTrigger
+              className="w-full dark:border-2  dark:border-[#2D3748]"
+              id="itemsPerPageSelect"
+            >
               <SelectValue placeholder="Select items" />
             </SelectTrigger>
             <SelectContent>
@@ -175,14 +181,14 @@ export function PaginationDemo({
             </SelectContent>
           </Select>
         </div>
-        <Pagination className=" flex justify-end mx-0 w-[62%] ">
+        {/* <Pagination className=" flex justify-end mx-0 w-[62%] ">
           <PaginationContent className="flex-wrap justify-center">
             <PaginationItem>
               <PaginationPrevious
                 href="#"
                 onClick={() => handlePageChange(dataPagination.page - 1)}
                 className={`dark:text-white${
-                  dataPagination.page === 1
+                  dataPagination?.page === 1
                     ? "pointer-events-none opacity-50"
                     : ""
                 } sm:mr-2`}
@@ -194,16 +200,16 @@ export function PaginationDemo({
             <PaginationItem>
               <PaginationNext
                 href="#"
-                onClick={() => handlePageChange(dataPagination.page + 1)}
+                onClick={() => handlePageChange(dataPagination?.page + 1)}
                 className={`dark:text-white${
-                  dataPagination.page === dataPagination.total_pages
+                  dataPagination?.page === dataPagination?.total_pages
                     ? "pointer-events-none opacity-50"
                     : ""
                 } sm:ml-2`}
               />
             </PaginationItem>
           </PaginationContent>
-        </Pagination>
+        </Pagination> */}
       </div>
     </div>
   );

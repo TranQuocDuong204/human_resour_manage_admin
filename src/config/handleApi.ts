@@ -8,30 +8,27 @@ const handleApi = async (
   limit?: number,
   search?: string,
   params?: {
-    department_name?: string,
-    employee_type?: string,
-    gender?: string
+    department_name?: string;
+    employee_type?: string;
+    gender?: string;
   }
 ) => {
   let queryString = "";
 
- 
   if (page && limit) {
     queryString += `page=${page}&limit=${limit}`;
   }
-
 
   if (search) {
     queryString += queryString ? `&search=${search}` : `search=${search}`;
   }
 
-
   if (params) {
-    
-    const searchParams = new URLSearchParams(params); 
-    queryString += queryString ? `&${searchParams.toString()}` : searchParams.toString();
+    const searchParams = new URLSearchParams(params);
+    queryString += queryString
+      ? `&${searchParams.toString()}`
+      : searchParams.toString();
   }
-
 
   if (queryString) {
     url = `${url}?${queryString}`;
@@ -43,7 +40,5 @@ const handleApi = async (
     data,
   });
 };
-
-
 
 export default handleApi;

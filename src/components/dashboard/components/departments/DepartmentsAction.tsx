@@ -1,10 +1,13 @@
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BsBuildingFillAdd } from "react-icons/bs";
-const DepartmentsAction = ({ onSearch }: any) => {
+import ModalAddNewDepartment from "./modal/ModalAddNewDepartment";
+const DepartmentsAction = ({ onSearch, setDataNewDepartment }: any) => {
+  const [isOpen, setIsOpen] = useState(false);
   const handleAddNewDeparment = () => {
-    alert("add new department");
+    setIsOpen(true);
   };
   return (
     <div className="flex gap-2 justify-between items-center">
@@ -21,6 +24,13 @@ const DepartmentsAction = ({ onSearch }: any) => {
         <BsBuildingFillAdd />
         Add new Department
       </Button>
+      <ModalAddNewDepartment
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        setDataNewDepartment={(value: any) => {
+          setDataNewDepartment(value);
+        }}
+      />
     </div>
   );
 };
