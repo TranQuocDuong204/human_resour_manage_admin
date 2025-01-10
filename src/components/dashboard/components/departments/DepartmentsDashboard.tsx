@@ -11,7 +11,7 @@ const DepartmentsDashboard = ({ nameTitle }: any) => {
   return (
     <div className="w-full dark:border-2 dark:border-[#2D3748] p-5 rounded-lg">
       <div className="pb-2">
-        <h2 className=" text-xl font-semibold">{nameTitle}</h2>
+        <h2 className=" text-2xl font-semibold">{nameTitle}</h2>
       </div>
       <div>
         <DepartmentsAction

@@ -233,9 +233,12 @@ const AddEmployeePage = () => {
       const res = await handleApi("/employees/");
       const result = await res.data;
 
+      
       const dataPersonnal = result.data.find(
         (i: any) => i.user_id === parsedAuth.response.user_id
       );
+  
+      
       if (dataPersonnal) {
         setValueInputEmployee(dataPersonnal);
         setIsEdit(true);

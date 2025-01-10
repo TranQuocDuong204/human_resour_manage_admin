@@ -1,5 +1,4 @@
 import axiosInstance from "./axiosInstance";
-
 const handleApi = async (
   url: string,
   data?: any,

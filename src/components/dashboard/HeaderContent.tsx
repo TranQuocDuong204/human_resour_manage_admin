@@ -61,8 +61,11 @@ const HeaderContent = ({ isOpen, setIsOpen }: IIsOpenProps) => {
             {pathSegments.map((i, index) => {
               const pathMap: Record<string, { href: string; label: string }> = {
                 dashboard: { href: "/dashboard", label: "Dashboard" },
-                employees: { href: "/dashboard/employees", label: "Employees" },
+                employees: { href: "/dashboard/employees", label: "Employees"
+                  
+                 },
                 profile: { href: "/dashboard/profile", label: "Profile" },
+                projects: { href: "/dashboard/projects", label: "Projects" },
                 departments: {
                   href: "/dashboard/departments",
                   label: "Departments",

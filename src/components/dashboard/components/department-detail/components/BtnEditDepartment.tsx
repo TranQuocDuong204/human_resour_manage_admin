@@ -7,8 +7,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HiRectangleGroup } from "react-icons/hi2";
 import handleApi from "@/config/handleApi";
-const BtnEditDepartment = ({ idDetailDepartment, listIdEmployees }: any) => {
+import ConfirmTranferModal from "../modals/ConfirmTranferModal";
+import { toast } from "@/hooks/use-toast";
+const BtnEditDepartment = ({
+  idDetailDepartment,
+  listIdEmployees,
+  setDataDetail,
+  setListIdEmployees,
+}: any) => {
   const [dataDepartment, setDataDepartment] = useState<any[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [nameDepartment, setNameDepartment] = useState<string>("");
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState<boolean>(false);
   const getDepartment = async () => {
     try {
       const res = await handleApi("/departments/");
@@ -22,6 +32,56 @@ const BtnEditDepartment = ({ idDetailDepartment, listIdEmployees }: any) => {
     }
   };
 
+  const handleCheckTranfer = (id: string) => {
+    setNameDepartment(id);
+    setIsOpen(true);
+  };
+  const handleUpdateEmployee = async (id: string) => {
+    setIsLoadingUpdate(true);
+    if (!listIdEmployees || listIdEmployees.length === 0) {
+      console.error("Employee list is empty.");
+      return;
+    }
+
+    if (!id) {
+      console.error("Department ID is not provided.");
+      return;
+    }
+    try {
+      const res = await handleApi(
+        "/departments",
+        {
+          employee_ids: listIdEmployees,
+          department_id: id,
+        },
+        "put"
+      );
+      const result = await res.data;
+      if (result?.error) {
+        console.error("Error updating employees:", result.error);
+      } else {
+        console.log("Successfully updated employees:", res);
+        setIsLoadingUpdate(false);
+        setIsOpen(false);
+        setDataDetail((prev: any) => {
+          return {
+            ...prev,
+            employees: prev.employees.filter(
+              (item: any) => !listIdEmployees.includes(item.id)
+            ),
+          };
+        });
+        setListIdEmployees([]);
+        toast({
+          variant: "default",
+          title: `Success`,
+          description: "Update department successfully",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getDepartment();
   }, []);
@@ -58,7 +118,11 @@ const BtnEditDepartment = ({ idDetailDepartment, listIdEmployees }: any) => {
 
           <DropdownMenuContent className="mt-3 w-64  cursor-pointer p-3">
             {dataDepartment.map((item: any, index: number) => (
-              <DropdownMenuItem key={item.id} className="cursor-pointer">
+              <DropdownMenuItem
+                key={item.id}
+                className="cursor-pointer"
+                onClick={() => handleCheckTranfer(item.id)}
+              >
                 <div>
                   <p>{item.name_department}</p>
                 </div>
@@ -67,6 +131,15 @@ const BtnEditDepartment = ({ idDetailDepartment, listIdEmployees }: any) => {
           </DropdownMenuContent>
         </DropdownMenu>
       )}
+      <ConfirmTranferModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        handleUpdateEmployee={(value: string) => {
+          handleUpdateEmployee(value);
+        }}
+        isLoadingUpdate={isLoadingUpdate}
+        nameDepartment={nameDepartment}
+      />
     </>
   );
 };

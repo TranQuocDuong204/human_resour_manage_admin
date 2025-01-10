@@ -9,7 +9,7 @@ import dynamic from "next/dynamic";
 
 import FilterEmployees from "./components/FilterEmployees";
 import BtnExportExcel from "./components/BtnExportExcel";
-
+import useDebounced from "@/hooks/useDebounced";
 const ModalAddEmployees = dynamic(() => import("./modals/ModalAddEmployees"), {
   ssr: false,
 });
@@ -41,6 +41,7 @@ const EmployeesAction = ({
         placeholder="Search name employees"
         className="sm:w-64 md:w-80 dark:border-2 dark:border-[#5f656e] "
         onChange={(e) => onSearch(e.target.value)}
+        
       />
       <div className=" flex items-center gap-3 flex-wrap">
         <ModalAddEmployees isOpen={isOpen} setIsOpen={setIsOpen} info={info} />

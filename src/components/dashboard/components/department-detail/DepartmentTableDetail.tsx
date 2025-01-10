@@ -21,7 +21,7 @@ interface ITableHeader {
   width: string;
 }
 const tableHeader: ITableHeader[] = [
-  { label: "Acions", width: "8%" },
+  { label: "checkbox", width: "8%" },
   { label: "Avatar", width: "8%" },
   { label: "Employees Name", width: "18%" },
   { label: "Role", width: "14%" },
@@ -53,6 +53,7 @@ const DepartmentTableDetail = ({
     try {
       const res = await handleApi(`/employees/${id}`);
       const results = await res.data;
+
       setDataDetailEmployee(results.employee_details);
     } catch (error) {
       console.log(error);
@@ -70,24 +71,39 @@ const DepartmentTableDetail = ({
     setListIdEmployees(results);
   };
 
+  const handleChoiceAll = (e: any) => {
+    console.log(e.target.checked, dataDetail);
+    const results =
+      e.target.checked === true ? dataDetail.map((item: any) => item.id) : [];
+    setListIdEmployees(results);
+  };
   return (
     <div className="mt-3 relative ">
       <Table className="w-full">
-        <TableHeader className="sticky top-0 bg-white dark:bg-gray-800 z-10">
-          <TableRow>
+        <TableHeader className="sticky top-0 bg-white dark:bg-gray-800 z-10 ">
+          <TableRow className="">
             {tableHeader.map((header, index) => (
               <TableHead
                 key={index}
-                className="font-normal text-gray-500 dark:text-white"
+                className="font-normal text-gray-500 dark:text-white "
                 style={{ width: header.width }}
               >
-                {header.label}
+                {header.label === "checkbox" ? (
+                  <input
+                    checked={listIdEmployees?.length === dataDetail?.length}
+                    onChange={handleChoiceAll}
+                    type={header.label}
+                    className=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                ) : (
+                  header.label
+                )}
               </TableHead>
             ))}
           </TableRow>
         </TableHeader>
       </Table>
-      <div className=" h-[300px] overflow-y-auto  border rounded-md">
+      <div className=" h-[300px] overflow-y-auto  border rounded-md ">
         <Table className=" w-full ">
           <TableBody>
             {isLoading ? (
@@ -102,21 +118,15 @@ const DepartmentTableDetail = ({
               </TableRow>
             ) : dataDetail?.length > 0 ? (
               dataDetail?.map((item: any, index: number) => (
-                <TableRow key={index} className="min-h-[50px]">
+                <TableRow key={index} className="min-h-[50px] ">
                   <TableCell>
-                    {item.role === "manager" ? (
-                      <span className="text-white font-medium text-xs p-1 rounded-md  bg-green-400">
-                        In progress
-                      </span>
-                    ) : (
-                      <input
-                        onChange={(e) => handleGetIdEmployee(e, item.id)}
-                        type="checkbox"
-                        value={item.id}
-                        checked={listIdEmployees.includes(item.id)}
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                    )}
+                    <input
+                      onChange={(e) => handleGetIdEmployee(e, item.id)}
+                      type="checkbox"
+                      value={item.id}
+                      checked={listIdEmployees.includes(item.id)}
+                      className=" cursor-pointer w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                    />
                   </TableCell>
                   <TableCell className="font-medium w-[8%]">
                     <div className="flex items-center">

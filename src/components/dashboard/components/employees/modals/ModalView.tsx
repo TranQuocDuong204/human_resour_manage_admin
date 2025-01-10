@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {  Send } from "lucide-react";
+import { Send } from "lucide-react";
 
 interface IUser {
   username: string;
@@ -35,7 +35,6 @@ const ModalView = ({
   setIsOpenView,
   dataDetailEmployee,
 }: EmployeeDialogProps) => {
-  
   return (
     <Dialog open={isOpenView} onOpenChange={setIsOpenView}>
       <DialogContent
@@ -50,7 +49,10 @@ const ModalView = ({
           <div className="flex  flex-col items-center justify-evenly">
             <div>
               <img
-                src={dataDetailEmployee?.avatar || "https://avatars.githubusercontent.com/u/124599?v=4"}
+                src={
+                  dataDetailEmployee?.avatar ||
+                  "https://avatars.githubusercontent.com/u/124599?v=4"
+                }
                 alt="Avatar"
                 className=" rounded-full w-[100px] h-[100px] object-cover"
               />

@@ -7,8 +7,6 @@ import handleApi from "@/config/handleApi";
 import { PaginationDemo } from "../Pagination";
 import useDebounced from "@/hooks/useDebounced";
 const DepartmentDetailDashboard = ({ idDetail }: any) => {
-  const [dataDetail, setDataDetail] = useState<any[]>([]);
-  const [nameDepartment, setNameDepartment] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [paginationDetail, setPaginationDetail] = useState<any>({
     page: 1,
@@ -18,22 +16,28 @@ const DepartmentDetailDashboard = ({ idDetail }: any) => {
   const [valueSearch, setValueSearch] = useState<string>("");
   const debouncedSearchTerm = useDebounced(valueSearch, 1000);
   const [listIdEmployees, setListIdEmployees] = useState<string[]>([]);
-  const getApiDetailDepartment = async () => {
+  const [isCheckManager, setIsCheckManager] = useState(true);
+  const [dataDetailDepartment, setDataDetailDepartment] = useState<any>({});
+  const getApiDetailDepartment = async (
+    idDetail: string,
+    page: number,
+    limit: number,
+    search: string
+  ) => {
     setIsLoading(true);
     try {
       const res = await handleApi(
         `/employees/department-by-id/${idDetail}`,
         undefined,
         "get",
-        paginationDetail.page,
-        paginationDetail.limit,
-        debouncedSearchTerm
+        page,
+        limit,
+        search
       );
       const data = await res.data;
-
+      setIsCheckManager(data.isCheckManager ? true : false);
+      setDataDetailDepartment(data);
       setDataPagination(data.pagination);
-      setNameDepartment(data.name_department);
-      setDataDetail(data.employees);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -43,33 +47,47 @@ const DepartmentDetailDashboard = ({ idDetail }: any) => {
   };
 
   useEffect(() => {
-    getApiDetailDepartment();
-  }, [idDetail]);
+    getApiDetailDepartment(
+      idDetail,
+      paginationDetail.page,
+      paginationDetail.limit,
+      debouncedSearchTerm
+    );
+  }, [
+    idDetail,
+    paginationDetail.page,
+    paginationDetail.limit,
+    debouncedSearchTerm,
+  ]);
 
-  useEffect(() => {
-    getApiDetailDepartment();
-  }, [paginationDetail.page]);
-  useEffect(() => {
-    setPaginationDetail({ ...paginationDetail, page: 1 });
-    getApiDetailDepartment();
-  }, [paginationDetail.limit]);
-
-  useEffect(() => {
-    getApiDetailDepartment();
-  }, [debouncedSearchTerm]);
-
-  
   return (
     <Card className="w-full dark:border-2 dark:border-[#2D3748] border-none">
       <CardHeader className="px-6 py-4 ">
         <CardTitle className=" text-xl">
-          {isLoading ? "Loading...." : nameDepartment}
+          {isLoading ? (
+            <div className="w-48 h-6 bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 bg-[length:200%_100%] animate-shimmer rounded-md"></div>
+          ) : (
+            dataDetailDepartment.name_department
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <DepartmentActionDetail setValueSearch={setValueSearch} idDetailDepartment={idDetail} listIdEmployees={listIdEmployees}/>
+        <DepartmentActionDetail
+          setValueSearch={setValueSearch}
+          idDetailDepartment={idDetail}
+          listIdEmployees={listIdEmployees}
+          setDataDetail={setDataDetailDepartment}
+          setListIdEmployees={setListIdEmployees}
+          dataDetailDepartment={dataDetailDepartment}
+          isCheckManager={isCheckManager}
+        />
 
-        <DepartmentTableDetail dataDetail={dataDetail} isLoading={isLoading} setListIdEmployees={setListIdEmployees} listIdEmployees={listIdEmployees} />
+        <DepartmentTableDetail
+          dataDetail={dataDetailDepartment.employees}
+          isLoading={isLoading}
+          setListIdEmployees={setListIdEmployees}
+          listIdEmployees={listIdEmployees}
+        />
       </CardContent>
       <PaginationDemo
         dataPagination={dataPagination}

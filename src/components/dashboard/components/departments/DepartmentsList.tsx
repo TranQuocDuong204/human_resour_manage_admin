@@ -8,7 +8,7 @@ const DepartmentsList = ({ valueSearch, dataNewDepartment }: any) => {
   const [dataDepartment, setDataDepartment] = useState<any[]>([]);
   const [dataUser, setDataUser] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const getDataDepartment = async () => {
+  const getDataDepartment = async (valueSearch: string) => {
     setIsLoading(true);
     try {
       const res = await handleApi(
@@ -41,16 +41,11 @@ const DepartmentsList = ({ valueSearch, dataNewDepartment }: any) => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     getDataUser();
-    getDataDepartment();
   }, []);
-
   useEffect(() => {
-    if (valueSearch) {
-      getDataDepartment();
-    }
+    getDataDepartment(valueSearch);
   }, [valueSearch]);
 
   useEffect(() => {

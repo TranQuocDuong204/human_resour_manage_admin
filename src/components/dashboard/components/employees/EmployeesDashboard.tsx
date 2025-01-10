@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import EmployeesAction from "./EmployeesAction";
 import EmployeesTable from "./EmployeesTable";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +8,13 @@ import handleApi from "@/config/handleApi";
 import { LabelFilter } from "./components/LabelFilter";
 import useDebounced from "@/hooks/useDebounced";
 
+interface ITemFilter {
+  department_name: string;
+  employee_type: string;
+}
+interface ITemFilter {
+  gender: string;
+}
 const EmployeesDashboard = () => {
   const [dataEmployee, setDataEmployee] = useState<any[]>([]);
   const [paginationEmployees, setPaginationEmployees] = useState<any>({
@@ -20,38 +27,42 @@ const EmployeesDashboard = () => {
   const [dataPagination, setDataPagination] = useState<any>({});
   const [labelFilter, setLabelFilter] = useState<any[]>([]);
   const debouncedSearchTerm = useDebounced(valueSearch, 1000);
-  const [itemFilter, setItemFilter] = useState<any>({
+  const [itemFilter, setItemFilter] = useState<ITemFilter>({
     department_name: "",
     employee_type: "",
     gender: "",
   });
-  const getDataEmployee = async () => {
-    setIsLoading(true);
-    try {
-      const res = await handleApi(
-        "/employees/",
-        undefined,
-        "get",
-        paginationEmployees.page,
-        paginationEmployees.limit,
-        valueSearch,
-        {
-          ...itemFilter,
-        }
-      );
-      const result = res.data;
-      const dataFull = result.data.filter(
-        (item: any) => item.users && item.departments
-      );
-      setDataPagination(result.pagination);
-      setDataEmployee(dataFull);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const getDataEmployee = useCallback(
+    async (page: number, limit: number, search: string, item: any) => {
+      setIsLoading(true);
+      try {
+        const res = await handleApi(
+          "/employees/",
+          undefined,
+          "get",
+          page,
+          limit,
+          search,
+          {
+            ...item,
+          }
+        );
+        const result = res.data;
+        const dataFull = result.data.filter(
+          (item: any) => item.users && item.departments
+        );
+        setDataPagination(result.pagination);
+        setDataEmployee(dataFull);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    []
+  );
 
   const getDataDepartment = async () => {
     setIsLoading(true);
@@ -67,25 +78,22 @@ const EmployeesDashboard = () => {
       setIsLoading(false);
     }
   };
-
   useEffect(() => {
-    getDataEmployee();
+    getDataEmployee(
+      paginationEmployees.page,
+      paginationEmployees.limit,
+      debouncedSearchTerm,
+      itemFilter
+    );
+  }, [
+    paginationEmployees.limit,
+    debouncedSearchTerm,
+    itemFilter,
+    paginationEmployees.page,
+  ]);
+  useEffect(() => {
     getDataDepartment();
   }, []);
-  useEffect(() => {
-    getDataEmployee();
-  }, [paginationEmployees.page, debouncedSearchTerm]);
-
-  useEffect(() => {
-    if (paginationEmployees.limit) {
-      setPaginationEmployees({ ...paginationEmployees, page: 1 });
-      getDataEmployee();
-    }
-  }, [paginationEmployees.limit]);
-
-  useEffect(() => {
-    getDataEmployee();
-  }, [itemFilter]);
 
   const handleSetItemFilter = (key: string, value: string) => {
     setItemFilter((prev: any) => {
@@ -108,7 +116,7 @@ const EmployeesDashboard = () => {
   return (
     <Card className="w-full dark:border-2 dark:border-[#2D3748] border-none">
       <CardHeader className="px-6 py-4 ">
-        <CardTitle className=" text-xl">Employee Management</CardTitle>
+        <CardTitle className=" text-2xl">Employee Management</CardTitle>
       </CardHeader>
       <CardContent>
         <EmployeesAction
@@ -150,7 +158,6 @@ const EmployeesDashboard = () => {
         </div>
 
         <EmployeesTable
-          // handleSearch={handleSearch}
           isLoading={isLoading}
           dataEmployee={dataEmployee}
           setDataEmployee={setDataEmployee}
