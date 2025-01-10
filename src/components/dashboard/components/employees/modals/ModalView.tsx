@@ -7,14 +7,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Briefcase, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
+interface IUser {
+  username: string;
+  email: string;
+  name_department: string;
+}
 interface IEmployeeData {
   avatar?: string;
-  userName?: string;
+  users?: IUser;
   nationality?: string;
   email?: string;
-  departmentName?: string;
+  departments?: IUser;
   phone_number?: string;
   office_location?: string;
   employee_type?: string;
@@ -23,7 +28,7 @@ interface IEmployeeData {
 interface EmployeeDialogProps {
   isOpenView: boolean;
   setIsOpenView: (open: boolean) => void;
-  dataDetailEmployee: IEmployeeData;
+  dataDetailEmployee: IEmployeeData | null;
 }
 const ModalView = ({
   isOpenView,
@@ -44,7 +49,10 @@ const ModalView = ({
           <div className="flex  flex-col items-center justify-evenly">
             <div>
               <img
-                src={dataDetailEmployee?.avatar}
+                src={
+                  dataDetailEmployee?.avatar ||
+                  "https://avatars.githubusercontent.com/u/124599?v=4"
+                }
                 alt="Avatar"
                 className=" rounded-full w-[100px] h-[100px] object-cover"
               />
@@ -54,8 +62,8 @@ const ModalView = ({
 
             <div className="flex flex-col text-center gap-3">
               <div className="py-2 border-b-2">
-                <h2 className="text-4xl font-bold">
-                  {dataDetailEmployee?.userName}
+                <h2 className="text-3xl font-bold text-center">
+                  {dataDetailEmployee?.users?.username}
                 </h2>
                 <p className=" text-gray-500  text-sm">
                   {dataDetailEmployee?.nationality}
@@ -65,11 +73,11 @@ const ModalView = ({
                 <div className=" flex items-center gap-4">
                   <span className=" font-semibold">Email:</span>
 
-                  <p>{dataDetailEmployee?.email}</p>
+                  <p>{dataDetailEmployee?.users?.email}</p>
                 </div>
                 <div className=" flex items-center gap-4">
                   <span className=" font-semibold">Department:</span>
-                  <p>{dataDetailEmployee?.departmentName}</p>
+                  <p>{dataDetailEmployee?.departments?.name_department}</p>
                 </div>
                 <div className=" flex items-center gap-4">
                   <span className=" font-semibold">Phone Number:</span>

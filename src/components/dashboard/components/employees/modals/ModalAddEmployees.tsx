@@ -178,48 +178,7 @@ const ModalAddEmployees = ({ isOpen, setIsOpen, info }: IModalAddEmployees) => {
                 )}
               />
 
-              {/* <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem className="mb-4">
-                                        <FormLabel>Password</FormLabel>
-                                        <div className="flex items-center gap-2 relative">
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Enter password"
-                                                    type={isPasswordVisible ? 'text' : 'password'}
-                                                    {...field} 
-                                                    value={passRanDom} 
-                                                    onChange={(e) => {
-                                                        setPassRanDom(e.target.value); 
-                                                        field.onChange(e.target.value); 
-                                                    }}
-                                                    readOnly
-                                                    disabled={true}
-                                                    className="pr-10"
-                                                />
-                                            </FormControl>
-
-                                          
-                                            <span
-                                                onClick={togglePasswordVisibility}
-                                                className="absolute right-16 text-gray-500 text-xl cursor-pointer"
-                                            >
-                                                {isPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                                            </span>
-
-                                            
-                                            <FormControl className="cursor-pointer" onClick={generatePass}>
-                                                <span className="text-2xl text-yellow-500">
-                                                    <SiConvertio />
-                                                </span>
-                                            </FormControl>
-                                        </div>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            /> */}
+             
 
               <div className="flex flex-col relative mb-4">
                 <label

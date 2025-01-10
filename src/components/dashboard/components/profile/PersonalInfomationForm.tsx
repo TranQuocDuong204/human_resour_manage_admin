@@ -15,9 +15,7 @@ const PersonalInfomationForm = ({
   return (
     <>
       {isLoading ? (
-        <div className="flex items-center justify-center h-[300px]">
-          <Loader />
-        </div>
+        <div className="w-full h-[330px] bg-gradient-to-r from-gray-300 via-gray-200 to-gray-300 bg-[length:200%_100%] animate-shimmer rounded-md"></div>
       ) : (
         <div className=" grid grid-cols-1  md:grid-cols-2 gap-6 flex-wrap mt-5">
           <div className=" flex flex-col  items-center gap-4">

@@ -12,6 +12,7 @@ export default {
       animation: {
         'truck-motion': 'motion 1.5s ease-in-out infinite',
         'road': 'roadAnimation 2s linear infinite',
+        shimmer: 'shimmer 1.5s infinite linear',
       },
       keyframes: {
         motion: {
@@ -22,6 +23,14 @@ export default {
         roadAnimation: {
           '0%': { transform: 'translateX(100%)' },
           '100%': { transform: 'translateX(-100%)' },
+        },
+        shimmer: {
+          '0%': {
+            backgroundPosition: '-200% 0',
+          },
+          '100%': {
+            backgroundPosition: '200% 0',
+          },
         },
       },
       colors: {

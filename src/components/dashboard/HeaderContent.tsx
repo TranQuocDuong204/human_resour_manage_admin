@@ -18,8 +18,17 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlices";
 import { useRouter } from "next/navigation";
-const HeaderContent = () => {
-  const auth = typeof window !== "undefined" ? localStorage.getItem("auth") ?? null : false;
+import { TiThMenu } from "react-icons/ti";
+
+interface IIsOpenProps {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const HeaderContent = ({ isOpen, setIsOpen }: IIsOpenProps) => {
+  const auth =
+    typeof window !== "undefined"
+      ? localStorage.getItem("auth") ?? null
+      : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   const info = parsedAuth.response;
   const pathname = usePathname();
@@ -39,43 +48,46 @@ const HeaderContent = () => {
     router.push("/dashboard/profile");
   };
   return (
-    <section className="sticky top-0 left-0 z-50 bg-white dark:bg-[black] dark:border-[white] p-2 mb-5 shadow-sm rounded-sm">
-      <div className="flex justify-between items-center  ">
+    <section className="sticky top-0 left-0 z-50 bg-white dark:bg-[black] dark:border-[white] p-2 mb-5 shadow ">
+      <div className="flex justify-between items-center  px-3 sm:px-0">
+        <div
+          className="block md:hidden cursor-pointer hover:text-slate-600"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <TiThMenu className=" text-2xl" />
+        </div>
         <div className="md:flex md:flex-col hidden ">
           <h2 className="text-xl font-bold flex  items-center">
             {pathSegments.map((i, index) => {
-              if (i === "dashboard") {
-                return (
-                  <Link
-                    href={`/dashboard`}
-                    key={index}
-                    className=" text-base text-slate-500 dark:text-white"
-                  >
-                    Dashboard
-                  </Link>
-                );
-              } else if (i === "employees") {
-                return (
-                  <Link
-                    href={`/dashboard/employees`}
-                    key={index}
-                    className=" text-base flex items-center text-slate-500 dark:text-white"
-                  >
-                    <MdNavigateNext />
-                    Employees
-                  </Link>
-                );
-              } else if (i === "profile") {
-                return (
-                  <Link
-                    href={`/dashboard/profile`}
-                    key={index}
-                    className=" text-base flex items-center text-slate-500 dark:text-white"
-                  >
-                    <MdNavigateNext /> Profile
-                  </Link>
-                );
-              }
+              const pathMap: Record<string, { href: string; label: string }> = {
+                dashboard: { href: "/dashboard", label: "Dashboard" },
+                employees: { href: "/dashboard/employees", label: "Employees"
+                  
+                 },
+                profile: { href: "/dashboard/profile", label: "Profile" },
+                projects: { href: "/dashboard/projects", label: "Projects" },
+                departments: {
+                  href: "/dashboard/departments",
+                  label: "Departments",
+                },
+              };
+              const pathItem = pathMap[i];
+
+              if (!pathItem) return null;
+
+              return (
+                <Link
+                  href={pathItem.href}
+                  key={index}
+                  className={` flex items-center ml-2 text-sm font-medium ${
+                    i === "dashboard" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  } text-slate-500 dark:text-white`}
+                >
+                  {i !== "dashboard" && <MdNavigateNext className="mr-2" />}
+                  {pathItem.label}
+                </Link>
+              );
+              
             })}
           </h2>
         </div>

@@ -2,8 +2,8 @@ import DepartmentsDashboard from "@/components/dashboard/components/departments/
 
 const DepartmentsPage = () => {
   return (
-    <div>
-      <DepartmentsDashboard />
+    <div className=" m-3">
+      <DepartmentsDashboard nameTitle="Departments Manager" />
     </div>
   );
 };

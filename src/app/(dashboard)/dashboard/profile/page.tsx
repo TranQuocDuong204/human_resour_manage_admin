@@ -56,7 +56,10 @@ const AddEmployeePage = () => {
     user_id: "",
     department_id: "",
   });
-  const auth = typeof window !== "undefined" ? localStorage.getItem("auth") ?? null : false;
+  const auth =
+    typeof window !== "undefined"
+      ? localStorage.getItem("auth") ?? null
+      : false;
   const parsedAuth = auth ? JSON.parse(auth) : null;
   useEffect(() => {
     getApiEmployee();
@@ -229,9 +232,13 @@ const AddEmployeePage = () => {
     try {
       const res = await handleApi("/employees/");
       const result = await res.data;
-      const dataPersonnal = result.find(
+
+      
+      const dataPersonnal = result.data.find(
         (i: any) => i.user_id === parsedAuth.response.user_id
       );
+  
+      
       if (dataPersonnal) {
         setValueInputEmployee(dataPersonnal);
         setIsEdit(true);

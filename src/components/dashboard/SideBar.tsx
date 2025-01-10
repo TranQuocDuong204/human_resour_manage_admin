@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
+import clsx from "clsx";
 const Sidebar = () => {
   const [isActive, setIsActive] = useState<null | number>(1);
   const pathName = usePathname();
@@ -78,7 +79,7 @@ const Sidebar = () => {
   ];
   return (
     <>
-      <div className="w-0 md:w-[15%] lg:w-[20%] xl:w-[18%] overflow-y-auto bg-[#F8F9FA] dark:bg-[black] shadow-lg rounded-lg px-0 xl:px-4">
+      <div className="w-0 md:w-[15%] lg:w-[20%] xl:w-[18%] overflow-y-auto bg-[#F8F9FA] dark:bg-[black] shadow-md rounded-lg px-0 xl:px-4">
         <div className="flex flex-col justify-between h-full p-3">
           <div>
             {/* Logo */}
@@ -91,31 +92,31 @@ const Sidebar = () => {
             {info === "admin" || info === "hr" ? (
               <ul className="flex flex-col gap-4">
                 {dataNav.map((item) => (
-                  <li
+                  <Link
+                    href={item.link}
                     key={item.id}
-                    className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
-                      isActive === item.id
-                        ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
-                        : " text-[#A0AEC0]"
-                    }`}
+                    className={clsx(
+                      "flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300",
+                      {
+                        "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white":
+                          isActive === item.id,
+                        " text-[#A0AEC0]": isActive !== item.id,
+                      }
+                    )}
                     onClick={() => setIsActive(item.id)}
                   >
                     <span
-                      className={`text-xl p-2 rounded-xl  ${
-                        isActive === item.id
-                          ? "text-[white] bg-[#FFD700]"
-                          : "text-[#FFD700] bg-white "
-                      }`}
+                      className={clsx("text-xl p-2 rounded-xl", {
+                        "text-[white] bg-[#FFD700]": isActive === item.id,
+                        "text-[#FFD700] bg-white": isActive !== item.id,
+                      })}
                     >
                       {item.icon}
                     </span>
-                    <Link
-                      href={item.link}
-                      className="hidden lg:block text-base transition-all duration-200 font-semibold"
-                    >
+                    <span className="hidden lg:block text-base transition-all duration-200 font-semibold">
                       {item.name}
-                    </Link>
-                  </li>
+                    </span>
+                  </Link>
                 ))}
               </ul>
             ) : (
@@ -123,19 +124,21 @@ const Sidebar = () => {
                 {dataNavStaff.map((item) => (
                   <li
                     key={item.id}
-                    className={`flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300 ${
-                      isActive === item.id
-                        ? "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white"
-                        : " text-[#A0AEC0]"
-                    }`}
+                    className={clsx(
+                      "flex p-2  justify-center lg:justify-start  items-center gap-2 rounded-lg transition-all duration-300",
+                      {
+                        "bg-[#FFFFFF]  text-[#2D3748] dark:bg-[#28354b] dark:text-white":
+                          isActive === item.id,
+                        "text-[#A0AEC0]": isActive !== item.id,
+                      }
+                    )}
                     onClick={() => setIsActive(item.id)}
                   >
                     <span
-                      className={`text-xl p-2 rounded-xl  ${
-                        isActive === item.id
-                          ? "text-[white] bg-[#FFD700]"
-                          : "text-[#FFD700] bg-white "
-                      }`}
+                      className={clsx("text-xl p-2 rounded-xl", {
+                        "text-[white] bg-[#FFD700]": isActive === item.id,
+                        "text-[#FFD700] bg-white": isActive !== item.id,
+                      })}
                     >
                       {item.icon}
                     </span>
@@ -151,17 +154,6 @@ const Sidebar = () => {
             )}
           </div>
           <ThemeToggle />
-          {/* Theme Toggle */}
-          {/* <div className="flex items-center justify-between flex-wrap lg:flex-nowrap mt-auto gap-2">
-              <button className="w-full lg:w-1/2 p-3 bg-[#7152F3] text-white font-semibold rounded-md flex items-center justify-center gap-2">
-                <CiLight className="text-2xl" />
-                Light
-              </button>
-              <button className="w-full lg:w-1/2 p-3 bg-zinc-200 text-gray-700 font-semibold rounded-md flex items-center justify-center gap-2">
-                <MdOutlineDarkMode className="text-2xl" />
-                Dark
-              </button>
-            </div> */}
         </div>
       </div>
     </>
