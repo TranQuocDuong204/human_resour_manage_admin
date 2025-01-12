@@ -2,36 +2,49 @@ import React from "react";
 import { MdMoreHoriz } from "react-icons/md";
 import { FaPlus } from "react-icons/fa";
 import { FaFlipboard } from "react-icons/fa6";
-const data = [1];
+import TaskList from "./TaskList";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 interface IPropsBoardCard {
-  dataColumns: any
+  dataColumns: any;
 }
-const BoardCard = ({dataColumns}: IPropsBoardCard) => {
+const BoardCard = ({ dataColumns }: IPropsBoardCard) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: dataColumns.id, data: { ...dataColumns } });
+
+  const style = {
+    // using touch action = none handle agian above mobile
+    touchAction: "none",
+    transform: CSS.Translate.toString(transform),
+    transition,
+    height: "510px",
+    opacity: isDragging ? 0.5 : undefined,
+  };
   return (
-    <section className="">
+    <section ref={setNodeRef} style={style} {...attributes}>
       {" "}
-      <div className={`w-[272px] max-h-full flex flex-col justify-between  cursor-pointer bg-slate-50 shadow-lg   p-2 rounded-md  `}>
+      <div
+        {...listeners}
+        className={`w-[272px] flex flex-col justify-between  cursor-pointer bg-slate-50 shadow-lg   p-2 rounded-md  `}
+      >
         <div className=" flex relative grow-0 items-start justify-between p-2 mb-1">
-          <h3 className=" text-base font-semibold">{dataColumns.column_name}</h3>
+          <h3 className=" text-base font-semibold">{dataColumns?.title}</h3>
           <span className=" cursor-pointer">
             <MdMoreHoriz />
           </span>
         </div>
-        <ul className=" max-h-[406px]  flex  gap-2 flex-col flex-nowrap mx-[4px]  overflow-y-auto ">
-          {data.map((item, index) => (
-            <li
-              key={index}
-              className=" w-full p-2 bg-white rounded-md break-words flex-grow-0 "
-            >
-              {item}
-            </li>
-          ))}
-        </ul>
+        <TaskList taskList={dataColumns?.tasks} />
 
-        <div className="flex items-center  gap-1   mt-2 rounded-md">
+        <div className="h-full flex items-end  gap-1 grow-0   mt-2 rounded-md">
           <div className=" flex items-center gap-1 p-2 hover:bg-slate-300  rounded-md basis-[90%] ">
             <FaPlus className=" text-xs" />
-            <span className=" text-sm font-semibold">Add a project</span>
+            <span className=" text-sm font-semibold">Add a new task</span>
           </div>
 
           <span className="p-2  hover:bg-slate-300 rounded-md md basis-[10%">

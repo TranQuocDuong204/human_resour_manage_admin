@@ -7,7 +7,7 @@ interface IPropsDashboard {
 const ProjectList = ({ dataProjects }: IPropsDashboard) => {
   return (
     <div className="mt-2 ">
-      <div className="flex items-stretch flex-row    flex-wrap ml-[-3rem] mb-[-.5rem] ">
+      <div className="flex items-stretch flex-row    flex-wrap ml-[-1rem] mb-[-.5rem] ">
         {" "}
         {dataProjects.map((item: any) => (
           <CardItem key={item.id} data={item} />

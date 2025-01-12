@@ -11,7 +11,7 @@ const CardItem = ({ data }: any) => {
   return (
     <Link
       href={`/dashboard/projects/${data.id}`}
-      className="relative cursor-pointer w-[calc(30%-2rem)] max-md:w-[calc(50%-2rem)] max-sm:w-full shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-xl ml-[3rem] mb-[.5rem] mt-8 hover:transition-all duration-300 hover:scale-105 group "
+      className="relative cursor-pointer w-[calc(33.33%-1rem)] max-lg:w-[calc(50%-1rem)] max-md:w-full   shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded-xl ml-[1rem] mb-[.5rem] mt-8 hover:transition-all duration-300 hover:scale-105 group "
     >
       <div className=" absolute inset-0 bg-[#FFD700] origin-bottom  rounded-xl   transform scale-y-0 transition-transform ease-in-out duration-300 group-hover:scale-y-100 z-0"></div>
       <div className="flex flex-col items-stretch justify-between  px-8 py-2 w-full relative mt-8">
